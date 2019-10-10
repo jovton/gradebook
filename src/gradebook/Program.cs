@@ -14,6 +14,12 @@ namespace gradebook
             {
                 Console.WriteLine($"Hello!");
             }
+
+            double x = 34.1;
+            double y = 15.9;
+
+            var z = x + y;
+            Console.WriteLine($"{x} + {y} is {z}.");
         }
     }
 }
