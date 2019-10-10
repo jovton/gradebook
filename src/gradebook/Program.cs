@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace gradebook
 {
@@ -12,14 +13,15 @@ namespace gradebook
             }
             else
             {
-                Console.WriteLine($"Hello!");
+                Console.WriteLine("Hello!");
             }
 
-            double x = 34.1;
-            double y = 15.9;
-
-            var z = x + y;
-            Console.WriteLine($"{x} + {y} is {z}.");
+            var numbers = new [] { 12.7, 4, 77.41 };
+            var sum = numbers.Sum();
+            var computationString = string.Join(" + ", numbers.Select(n => $"{n}"));
+            var message = $"{computationString} = {sum}.";
+            
+            Console.WriteLine(message);
         }
     }
 }
