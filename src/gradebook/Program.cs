@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace gradebook
@@ -16,10 +17,10 @@ namespace gradebook
                 Console.WriteLine("Hello!");
             }
 
-            var numbers = new [] { 12.7, 4, 77.41 };
-            var sum = numbers.Sum();
-            var computationString = string.Join(" + ", numbers.Select(n => $"{n}"));
-            var message = $"{computationString} = {sum}.";
+            var grades = new List<double>() { 12.7, 4, 77.41 };
+            var avg = grades.Average();
+            var computationString = string.Join(" and ", grades.Select(n => $"{n}"));
+            var message = $"The average of {computationString} is {avg}.";
             
             Console.WriteLine(message);
         }
