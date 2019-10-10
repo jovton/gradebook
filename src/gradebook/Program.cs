@@ -2,27 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace gradebook
+namespace GradeBook
 {
     class Program
     {
         static void Main(string[] args)
         {
-            if (args.Length > 0)
+            var book = new Book("jovton's Grade Book.");
+
+            var grades = new List<double>() { 12.7, 4, 77.41, 5.123 };
+            
+            foreach (var grade in grades)
             {
-                Console.WriteLine($"Hello, {args[0]}!");
-            }
-            else
-            {
-                Console.WriteLine("Hello!");
+                book.AddGrade(grade);
             }
 
-            var grades = new List<double>() { 12.7, 4, 77.41 };
-            var avg = grades.Average();
-            var computationString = string.Join(" and ", grades.Select(n => $"{n}"));
-            var message = $"The average of {computationString} is {avg}.";
-            
-            Console.WriteLine(message);
+            book.ShowStatistics();
         }
     }
 }
