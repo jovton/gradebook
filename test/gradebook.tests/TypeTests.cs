@@ -9,8 +9,10 @@ namespace GradeBook.Tests
         [Fact]
         public void CanSetNameByValue()
         {
-            // arrange / act
+            // arrange
             var book = GetBook("Book 1");
+
+            // act
             SetNameByValue(book, "Test Book");
 
             // assert
@@ -25,8 +27,10 @@ namespace GradeBook.Tests
         [Fact]
         public void CSharpIsPassByValue()
         {
-            // arrange / act
+            // arrange
             var book = GetBook("Book 1");
+
+            // act
             GetBookSetName(book, "Test Book 2");
 
             // assert
@@ -57,8 +61,10 @@ namespace GradeBook.Tests
         [Fact]
         public void NewBookReturnsDifferentInstance()
         {
-            // arrange / act
+            // arrange
             var book1 = GetBook("Test Book");
+
+            // act
             var book2 = GetBook("Test Book 2");
 
             // assert
@@ -69,8 +75,10 @@ namespace GradeBook.Tests
         [Fact]
         public void NewBookDoesNotReturnSameInstance()
         {
-            // arrange / act
+            // arrange
             var book1 = GetBook("Test Book");
+
+            // act
             var book2 = GetBook("Test Book 2");
 
             // assert
@@ -82,8 +90,10 @@ namespace GradeBook.Tests
         [Fact]
         public void TwoVariablesCanReferenceSameInstance()
         {
-            // arrange / act
+            // arrange
             var book1 = GetBook("Test Book");
+            
+            // act
             var book2 = book1;
 
             // assert
@@ -99,8 +109,13 @@ namespace GradeBook.Tests
         [Fact]
         public void ValuesTypesAlsoPassByValue()
         {
+            // arrange
             var x = GetInt();
+            
+            // act
             SetInt(x);
+
+            // assert
             Assert.Equal(3, x);
         }
 
@@ -117,8 +132,13 @@ namespace GradeBook.Tests
         [Fact]
         public void ValuesTypesCanPassByRef()
         {
+            // arrange
             var x = GetInt();
+
+            // act
             SetIntByRef(ref x);
+
+            // assert
             Assert.Equal(43, x);
         }
 
@@ -127,5 +147,29 @@ namespace GradeBook.Tests
             x = 43;
         }
 
+        [Fact]
+        public void StringsBehaveLikeValueTypes()
+        {
+            // arrange
+            string name = "jovton";
+
+            //act
+            ChangeStringParameter(name);
+            var upper = MakeUpperCase(name);
+
+            // assert
+            Assert.Equal("jovton", name);
+            Assert.Equal("JOVTON", upper);
+        }
+
+        private void ChangeStringParameter(string str)
+        {
+            str = str.ToUpper();
+        }
+
+        private string MakeUpperCase(string str)
+        {
+            return str.ToUpper();
+        }
     }
 }
