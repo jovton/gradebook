@@ -95,5 +95,37 @@ namespace GradeBook.Tests
         {
             return new Book(name);
         }
+
+        [Fact]
+        public void ValuesTypesAlsoPassByValue()
+        {
+            var x = GetInt();
+            SetInt(x);
+            Assert.Equal(3, x);
+        }
+
+        private void SetInt(int x)
+        {
+            x = 43;
+        }
+
+        private int GetInt()
+        {
+            return 3;
+        }
+
+        [Fact]
+        public void ValuesTypesCanPassByRef()
+        {
+            var x = GetInt();
+            SetIntByRef(ref x);
+            Assert.Equal(43, x);
+        }
+
+        private void SetIntByRef(ref int x)
+        {
+            x = 43;
+        }
+
     }
 }
