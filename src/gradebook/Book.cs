@@ -18,7 +18,14 @@ namespace GradeBook
 
         public void AddGrade(double grade)
         {
-            grades.Add(grade);
+            if (grade >= 0 && grade <= 100)
+            {
+                grades.Add(grade);
+            }
+            else
+            {
+                Console.WriteLine("You can only add grades between 0 and 100.");
+            }
         }
 
         public Statistics  ComputeStatistics()
@@ -32,35 +39,19 @@ namespace GradeBook
             return stats;
         }
 
-        public double Average()
+        private double Average()
         {
             return grades.Average();
         }
 
-        public double HighGrade()
+        private double HighGrade()
         {
             return grades.Max();
         }
 
-        public double LowGrade()
+        private double LowGrade()
         {
             return grades.Min();
-        }
-
-        public void ShowStatistics()
-        {
-            var stats = ComputeStatistics();
-
-            var numbersString = string.Join(" and ", grades.Select(n => $"{n}"));
-
-            var avgMessage = $"The average grade of {numbersString} is {stats.Average:N1}.";
-            Console.WriteLine(avgMessage);
-
-            var lowMessage = $"The lowest grade of {numbersString} is {stats.Low:N1}.";
-            Console.WriteLine(lowMessage);
-
-            var highMessage = $"The highest grade of {numbersString} is {stats.High:N1}.";
-            Console.WriteLine(highMessage);
         }
     }
 }
