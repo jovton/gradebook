@@ -35,8 +35,8 @@ namespace GradeBook.Tests
             var stats = book.ComputeStatistics();
 
             // assert
-            Assert.Equal(double.MaxValue, stats.High, 1);
-            Assert.Equal(double.MinValue, stats.Low, 1);
+            Assert.Equal(double.MinValue, stats.High, 1);
+            Assert.Equal(double.MaxValue, stats.Low, 1);
             Assert.Equal(0, stats.Average, 1);
         }
     }

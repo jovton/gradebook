@@ -32,26 +32,59 @@ namespace GradeBook
         {
             var stats = new Statistics();
 
-            stats.High = grades.Any() ? HighGrade() : double.MaxValue;
-            stats.Low = grades.Any() ? LowGrade() : double.MinValue;
-            stats.Average = grades.Any() ? Average() : 0;
+            stats.High = HighGrade();
+            stats.Low = LowGrade();
+            stats.Average = Average();
 
             return stats;
         }
 
         private double Average()
         {
-            return grades.Average();
+            double average = 0;
+
+            if (grades.Any())
+            {
+                var index = 0;
+                
+                do
+                {
+                        average += grades[index];
+                        index++;
+
+                } while (index < grades.Count);
+            
+                average /= grades.Count;
+            }
+
+            return average; //grades.Average(); // sad face :(
         }
 
         private double HighGrade()
         {
-            return grades.Max();
+            var high = double.MinValue;
+            var index = 0;
+            
+            while (index < grades.Count)
+            {
+                high = Math.Max(grades[index], high);
+                index++;
+            }
+
+            return high; // grades.Max(); // sad face :(
         }
 
         private double LowGrade()
         {
-            return grades.Min();
+            var low = double.MaxValue;
+            
+            for (var index = 0; index < grades.Count; index++)
+            {
+                low = Math.Min(grades[index], low);
+                index++;
+            }
+
+            return low; // grades.Min(); // sad face :(
         }
     }
 }
