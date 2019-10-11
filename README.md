@@ -1,6 +1,6 @@
-## GradeBook
+# GradeBook
 
-# C# Fundamentals
+## C# Fundamentals
 
 Follow along with Scott Allen on PluralSight where he takes us through the C# Fundamentals using .NET Core.
 
