@@ -29,6 +29,9 @@ namespace GradeBook
             var avgMessage = $"The average grade of {numbersString} is {stats.Average:N1}.";
             Console.WriteLine(avgMessage);
 
+            var letterMessage = $"The average letter grade of that is {stats.Letter}.";
+            Console.WriteLine(letterMessage);
+
             var lowMessage = $"The lowest grade of {numbersString} is {stats.Low:N1}.";
             Console.WriteLine(lowMessage);
 

@@ -16,12 +16,13 @@ namespace GradeBook.Tests
             book.AddGrade(50.5);
 
             // act
-            var result = book.ComputeStatistics();
+            var stats = book.ComputeStatistics();
 
             // assert
-            Assert.Equal(40.27, result.Average, 2);
-            Assert.Equal(30.1, result.Low);
-            Assert.Equal(50.5, result.High);
+            Assert.Equal(40.27, stats.Average, 2);
+            Assert.Equal(30.1, stats.Low);
+            Assert.Equal(50.5, stats.High);
+            Assert.Equal('F', stats.Letter);
         }
 
         [Fact]
@@ -38,6 +39,20 @@ namespace GradeBook.Tests
             Assert.Equal(double.MinValue, stats.High, 1);
             Assert.Equal(double.MaxValue, stats.Low, 1);
             Assert.Equal(0, stats.Average, 1);
+        }
+
+        [Fact]
+        public void CanAddLetterGrade()
+        {
+            // arrange
+            var book = new Book("Letters");
+
+            // act
+            book.AddLetterGrade('B');
+            var stats = book.ComputeStatistics();
+
+            // assert
+            Assert.Equal(80, stats.Average);
         }
     }
 }
