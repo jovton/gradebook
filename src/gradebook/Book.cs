@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GradeBook
 {
-    class Book
+    public class Book
     {
         private List<double> grades;
         private string name;
@@ -21,23 +21,20 @@ namespace GradeBook
             grades.Add(grade);
         }
 
+        public Statistics  ComputeStatistics()
+        {
+            var stats = new Statistics();
+
+            stats.High = grades.Any() ? HighGrade() : double.MaxValue;
+            stats.Low = grades.Any() ? LowGrade() : double.MinValue;
+            stats.Average = grades.Any() ? Average() : 0;
+
+            return stats;
+        }
+
         public double Average()
         {
             return grades.Average();
-        }
-
-        internal void ShowStatistics()
-        {
-            var computationString = string.Join(" and ", grades.Select(n => $"{n}"));
-
-            var avgMessage = $"The average grade of {computationString} is {Average():N1}.";            
-            Console.WriteLine(avgMessage);
-
-            var lowMessage = $"The lowest grade of {computationString} is {LowGrade():N1}.";
-            Console.WriteLine(lowMessage);
-
-            var highMessage = $"The highest grade of {computationString} is {HighGrade():N1}.";
-            Console.WriteLine(highMessage);
         }
 
         public double HighGrade()
@@ -48,6 +45,22 @@ namespace GradeBook
         public double LowGrade()
         {
             return grades.Min();
+        }
+
+        public void ShowStatistics()
+        {
+            var stats = ComputeStatistics();
+
+            var numbersString = string.Join(" and ", grades.Select(n => $"{n}"));
+
+            var avgMessage = $"The average grade of {numbersString} is {stats.Average:N1}.";
+            Console.WriteLine(avgMessage);
+
+            var lowMessage = $"The lowest grade of {numbersString} is {stats.Low:N1}.";
+            Console.WriteLine(lowMessage);
+
+            var highMessage = $"The highest grade of {numbersString} is {stats.High:N1}.";
+            Console.WriteLine(highMessage);
         }
     }
 }
