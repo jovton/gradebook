@@ -6,34 +6,14 @@ namespace GradeBook
 {
     public delegate void GradeAddedDelegate(object source, EventArgs args);
 
-    public class Book
+    public class Book : NamedObject
     {
         private List<double> grades;
         
-        private string name;
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    name = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of '{nameof(Book)}' to an empty value.");
-                }
-            }
-        }
         public bool HasGrades => grades.Any();
 
-        public Book(string name)
+        public Book(string name) : base(name)
         {
-            Name = name;
             grades = new List<double>();
         }
 
