@@ -26,13 +26,25 @@ namespace GradeBook.Tests
         }
 
         [Fact]
-        public void CannotAddNegative()
+        public void CannotAddOutside0to100()
         {
             // arrange
             var book = new InMemoryBook("Test Book");
 
             // act / assert
             Assert.Throws<ArgumentException>(() => book.AddGrade(-1));
+            Assert.Throws<ArgumentException>(() => book.AddGrade(1000));
+            Assert.False(book.HasGrades);
+        }
+
+        [Fact]
+        public void CannotAddInvalidLetterGrade()
+        {
+            // arrange
+            var book = new InMemoryBook("Test Book");
+
+            // act / assert
+            Assert.Throws<ArgumentException>(() => book.AddGrade('/'));
             Assert.False(book.HasGrades);
         }
 
@@ -84,6 +96,51 @@ namespace GradeBook.Tests
                 var b = new InMemoryBook("whitespace test");
                 b.Name = "      ";
             });
+        }
+
+        private int gradeAddedEventCounter;
+
+        [Fact]
+        public void AddGradeRaisesGradeAddedEvent()
+        {
+            // arrange
+            var book = new InMemoryBook("test");
+            book.GradeAdded += GradeAdded;
+            gradeAddedEventCounter = 0;
+
+            // act
+            book.AddGrade(1);
+
+            // assert
+            Assert.Equal(1, gradeAddedEventCounter);
+        }
+
+        private void GradeAdded(object source, EventArgs args)
+        {
+            gradeAddedEventCounter++;
+        }
+
+        [Fact]
+        public void NewEmptyBookHasNoGrades()
+        {
+            // arrange / act
+            var book = new InMemoryBook("test");
+            
+            // assert
+            Assert.False(book.HasGrades);
+        }
+
+        [Fact]
+        public void AddingGradesMakesHasGradesTrue()
+        {
+            // arrange
+            var book = new InMemoryBook("test");
+            
+            // act
+            book.AddGrade('A');
+
+            // assert
+            Assert.True(book.HasGrades);
         }
     }
 }
