@@ -31,14 +31,9 @@ namespace GradeBook.Tests
             // arrange
             var book = new Book("Test Book");
 
-            // act
-            book.AddGrade(-1);
-            var stats = book.ComputeStatistics();
-
-            // assert
-            Assert.Equal(double.MinValue, stats.High, 1);
-            Assert.Equal(double.MaxValue, stats.Low, 1);
-            Assert.Equal(0, stats.Average, 1);
+            // act / assert
+            Assert.Throws<ArgumentException>(() => book.AddGrade(-1));
+            Assert.False(book.HasGrades);
         }
 
         [Fact]

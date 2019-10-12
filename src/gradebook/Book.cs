@@ -7,8 +7,9 @@ namespace GradeBook
     public class Book
     {
         private List<double> grades;
-
+        
         public string Name { get; set; }
+        public bool HasGrades => grades.Any();
 
         public Book(string name)
         {
@@ -24,7 +25,7 @@ namespace GradeBook
             }
             else
             {
-                Console.WriteLine("You can only add grades between 0 and 100.");
+                throw new ArgumentException("ERROR: Invalid grade. Grades can only be between 0 and 100.", nameof(grade));
             }
         }
 
@@ -53,8 +54,7 @@ namespace GradeBook
                     break;
 
                 default:
-                    AddGrade(0);
-                    break;
+                    throw new ArgumentException($"Error: Invalid letter grade '{letter}'. Grades can only be from A to D, or F.");
             }
         }
 
@@ -65,29 +65,6 @@ namespace GradeBook
             stats.High = HighGrade();
             stats.Low = LowGrade();
             stats.Average = Average();
-
-            switch (stats.Average)
-            {
-                case var d when d >= 90:
-                    stats.Letter = 'A';
-                    break;
-
-                case var d when d >= 80:
-                    stats.Letter = 'B';
-                    break;
-
-                case var d when d >= 70:
-                    stats.Letter = 'C';
-                    break;
-
-                case var d when d >= 60:
-                    stats.Letter = 'D';
-                    break;
-
-                default:
-                    stats.Letter = 'F';
-                    break;
-            }
 
             return stats;
         }
@@ -110,12 +87,12 @@ namespace GradeBook
                 average /= grades.Count;
             }
 
-            return average; //grades.Average(); // sad face :(
+            return average;
         }
 
         private double HighGrade()
         {
-            var high = double.MinValue;
+            var high = HasGrades ? double.MinValue : 0d;
             var index = 0;
             
             while (index < grades.Count)
@@ -124,12 +101,12 @@ namespace GradeBook
                 index++;
             }
 
-            return high; // grades.Max(); // sad face :(
+            return high;
         }
 
         private double LowGrade()
         {
-            var low = double.MaxValue;
+            var low = HasGrades ? double.MaxValue : 0d;
             
             for (var index = 0; index < grades.Count; index++)
             {
@@ -137,7 +114,7 @@ namespace GradeBook
                 index++;
             }
 
-            return low; // grades.Min(); // sad face :(
+            return low;
         }
     }
 }

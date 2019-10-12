@@ -8,35 +8,81 @@ namespace GradeBook
     {
         static void Main(string[] args)
         {
-            var book = new Book("jovton's Grade Book.");
+            var book = new Book("jovton's Grade Book");
 
-            var grades = new List<double>() { 12.7, 4, 77.41, 5.123 };
+            Console.WriteLine("");
+            Console.WriteLine($"{book.Name} version 0.0.1:");
+            Console.WriteLine("");
 
-            foreach (var grade in grades)
+            if (args.Length == 0)
             {
-                book.AddGrade(grade);
+                Console.WriteLine("Please enter grades. Enter \"Q\" to start computation.");
+                Console.WriteLine("");
+
+                var input = string.Empty;
+
+                while (input != "Q")
+                {
+                    var pronoun = book.HasGrades ? "Next" : "First";
+                    Console.Write($"{pronoun} grade: ");
+                    input = Console.ReadLine().ToUpper();
+
+                    if (input != "Q")
+                    try
+                    {
+                        AddGrade(book, input);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }                
+            }
+            else
+            {
+                foreach (var arg in args)
+                {
+                    try
+                    {
+                        AddGrade(book, arg);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        break;
+                    }
+                }
             }
 
             var stats = book.ComputeStatistics();
 
-            ShowGradeStats(grades, stats);
+            ShowGradeStats(stats);
         }
 
-        private static void ShowGradeStats(List<double> grades, Statistics stats)
+        private static void AddGrade(Book book, string input)
         {
-            var numbersString = string.Join(" and ", grades.Select(n => $"{n}"));
+            if (double.TryParse(input, out double grade))
+            {
+                book.AddGrade(grade);
+            }
+            else if (input.Length == 1)
+            {
+                book.AddLetterGrade(input[0]);
+            }
+            else
+            {
+                throw new ArgumentException($"ERROR: Invalid grade '{input}'. Enter a value between 0 and 100, or a letter from A to D, or F.");
+            }
+        }
 
-            var avgMessage = $"The average grade of {numbersString} is {stats.Average:N1}.";
-            Console.WriteLine(avgMessage);
-
-            var letterMessage = $"The average letter grade of that is {stats.Letter}.";
-            Console.WriteLine(letterMessage);
-
-            var lowMessage = $"The lowest grade of {numbersString} is {stats.Low:N1}.";
-            Console.WriteLine(lowMessage);
-
-            var highMessage = $"The highest grade of {numbersString} is {stats.High:N1}.";
-            Console.WriteLine(highMessage);
+        private static void ShowGradeStats(Statistics stats)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"The highest grade is {stats.High:N1}.");
+            Console.WriteLine($"The lowest grade is {stats.Low:N1}.");
+            Console.WriteLine($"The average grade is {stats.Average:N1}.");
+            Console.WriteLine($"The average letter grade is {stats.Letter}.");
+            Console.WriteLine();
         }
     }
 }
