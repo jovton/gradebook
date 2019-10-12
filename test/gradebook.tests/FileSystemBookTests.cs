@@ -131,7 +131,7 @@ namespace GradeBook.Tests
         public void AddGradeRaisesGradeAddedEvent()
         {
             // arrange
-            var book = new FileSystemBook("test");
+            var book = new FileSystemBook(bookName);
             book.GradeAdded += GradeAdded;
             gradeAddedEventCounter = 0;
 
