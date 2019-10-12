@@ -4,6 +4,8 @@ using GradeBook;
 
 namespace GradeBook.Tests
 {
+    public delegate string WriteLogDelegate(string message);
+
     public class TypeTests
     {
         [Fact]
@@ -170,6 +172,24 @@ namespace GradeBook.Tests
         private string MakeUpperCase(string str)
         {
             return str.ToUpper();
+        }
+
+        [Fact]
+        public void WriteLogDelegateCanPointToMethod()
+        {
+            // arrange
+            WriteLogDelegate returnMessage = ReturnAMessage;
+
+            // act
+            var message = returnMessage("hello");
+
+            // assert
+            Assert.Equal("hello", message);
+        }
+
+        private string ReturnAMessage(string message)
+        {
+            return message;
         }
     }
 }
