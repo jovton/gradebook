@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace GradeBook
 {
+    public delegate void GradeAddedDelegate(object source, EventArgs args);
+
     public class Book
     {
         private List<double> grades;
@@ -23,7 +25,7 @@ namespace GradeBook
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of a '{nameof(Book)}' to an empty value.");
+                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of '{nameof(Book)}' to an empty value.");
                 }
             }
         }
@@ -35,11 +37,17 @@ namespace GradeBook
             grades = new List<double>();
         }
 
+        public event GradeAddedDelegate GradeAdded;
+        
         public void AddGrade(double grade)
         {
             if (grade >= 0 && grade <= 100)
             {
                 grades.Add(grade);
+                if (GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs() {  });
+                }
             }
             else
             {

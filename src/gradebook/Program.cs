@@ -9,6 +9,7 @@ namespace GradeBook
         static void Main(string[] args)
         {
             var book = new Book("jovton's Grade Book");
+            book.GradeAdded += OnGradeAdded;
 
             Console.WriteLine("");
             Console.WriteLine($"{book.Name} version 0.0.1:");
@@ -59,6 +60,11 @@ namespace GradeBook
                 var stats = book.ComputeStatistics();
                 ShowGradeStats(stats);
             }
+        }
+
+        private static void OnGradeAdded(object source, EventArgs args)
+        {
+            Console.WriteLine("Grade added.");
         }
 
         private static void AddGrade(Book book, string input)
