@@ -179,7 +179,7 @@ namespace GradeBook.Tests
         {
             // arrange
             WriteLogDelegate returnMessage = ReturnAMessage;
-
+            
             // act
             var message = returnMessage("hello");
 
@@ -189,6 +189,34 @@ namespace GradeBook.Tests
 
         private string ReturnAMessage(string message)
         {
+            return message;
+        }
+
+        private int logCounter;
+        
+        [Fact]
+        public void MultiCastDelegateTest()
+        {
+            logCounter = 0;
+            // arrange
+            WriteLogDelegate log = FirstLog;
+            log += SecondLog;
+            // act
+            var message = log("hello");
+
+            // assert
+            Assert.Equal(logCounter, 2);
+        }
+
+        private string SecondLog(string message)
+        {
+            logCounter++;
+            return message;
+        }
+
+        private string FirstLog(string message)
+        {
+            logCounter++;
             return message;
         }
     }
