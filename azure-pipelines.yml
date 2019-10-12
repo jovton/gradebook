@@ -16,16 +16,20 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  name: 'Install NuGet'
 
 - task: DotNetCoreCLI@2
+  name: 'NuGet restore'
   inputs:
     command: 'restore'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
+  name: 'Build solution'
   inputs:
     command: 'build'
 
 - task: DotNetCoreCLI@2
+  name: 'Run tests'
   inputs:
     command: 'test'
