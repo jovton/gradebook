@@ -69,7 +69,7 @@ namespace GradeBook
             }
             else if (input.Length == 1)
             {
-                book.AddLetterGrade(input[0]);
+                book.AddGrade(input[0]);
             }
             else
             {

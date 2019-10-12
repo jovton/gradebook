@@ -43,11 +43,47 @@ namespace GradeBook.Tests
             var book = new Book("Letters");
 
             // act
-            book.AddLetterGrade('B');
+            book.AddGrade('B');
             var stats = book.ComputeStatistics();
 
             // assert
             Assert.Equal(80, stats.Average);
+        }
+
+        [Fact]
+        public void CanSetAndGetName()
+        {
+            // arrange
+            var book = new Book("Hello");
+            
+            // act
+            book.Name = "Test";
+
+            // assert
+            Assert.Equal("Test", book.Name);
+        }
+
+        [Fact]
+        public void CannotSetEmptyName()
+        {
+            // arrange / act / assert
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                const string emptyName = "";
+                new Book(emptyName);
+            });
+            
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var b = new Book("null test");
+                b.Name = null;
+            });
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var b = new Book("whitespace test");
+                b.Name = "      ";
+            });
         }
     }
 }

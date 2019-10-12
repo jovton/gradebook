@@ -8,7 +8,25 @@ namespace GradeBook
     {
         private List<double> grades;
         
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    name = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of a '{nameof(Book)}' to an empty value.");
+                }
+            }
+        }
         public bool HasGrades => grades.Any();
 
         public Book(string name)
@@ -29,7 +47,7 @@ namespace GradeBook
             }
         }
 
-        public void AddLetterGrade(char letter)
+        public void AddGrade(char letter)
         {
             switch (letter)
             {
