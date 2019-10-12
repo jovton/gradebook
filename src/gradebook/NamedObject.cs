@@ -5,7 +5,7 @@ namespace GradeBook
     public class NamedObject
     {
         private string name;
-
+        
         public NamedObject(string name)
         {
             Name = name;
@@ -25,7 +25,7 @@ namespace GradeBook
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of '{nameof(Book)}' to an empty value.");
+                    throw new InvalidOperationException($"Cannot set '{nameof(Name)}' property of '{nameof(InMemoryBook)}' to an empty value.");
                 }
             }
         }

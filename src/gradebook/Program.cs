@@ -8,13 +8,24 @@ namespace GradeBook
     {
         static void Main(string[] args)
         {
-            var book = new Book("jovton's Grade Book");
+            var book = new InMemoryBook("jovton's Grade Book");
             book.GradeAdded += OnGradeAdded;
 
             Console.WriteLine("");
             Console.WriteLine($"{book.Name} version 0.0.1:");
             Console.WriteLine("");
+            
+            EnterGrades(args, book);
 
+            if (book.HasGrades)
+            {
+                var stats = book.ComputeStatistics();
+                ShowGradeStats(stats);
+            }
+        }
+
+        private static void EnterGrades(string[] args, IBook book)
+        {
             if (args.Length == 0)
             {
                 Console.WriteLine("Please enter grades. Enter \"Q\" to start computation.");
@@ -22,22 +33,22 @@ namespace GradeBook
 
                 var input = string.Empty;
 
-                while (input != "Q")
+                while (input.ToUpper() != "Q")
                 {
                     var pronoun = book.HasGrades ? "Next" : "First";
-                    Console.Write($"{pronoun} grade: ");
-                    input = Console.ReadLine().ToUpper();
+                    Console.Write($"{pronoun} grade (Enter 'Q' to stop): ");
+                    input = Console.ReadLine();
 
-                    if (input != "Q")
-                    try
-                    {
-                        AddGrade(book, input);
-                    }
-                    catch (ArgumentException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                }                
+                    if (input.ToUpper() != "Q")
+                        try
+                        {
+                            AddGrade(book, input);
+                        }
+                        catch (ArgumentException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                }
             }
             else
             {
@@ -54,12 +65,6 @@ namespace GradeBook
                     }
                 }
             }
-
-            if (book.HasGrades)
-            {
-                var stats = book.ComputeStatistics();
-                ShowGradeStats(stats);
-            }
         }
 
         private static void OnGradeAdded(object source, EventArgs args)
@@ -67,7 +72,7 @@ namespace GradeBook
             Console.WriteLine("Grade added.");
         }
 
-        private static void AddGrade(Book book, string input)
+        private static void AddGrade(IBook book, string input)
         {
             if (double.TryParse(input, out double grade))
             {

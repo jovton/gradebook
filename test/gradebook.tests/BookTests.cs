@@ -10,7 +10,7 @@ namespace GradeBook.Tests
         public void ComputeStatistics()
         {
             // arrange
-            var book = new Book("Test Book");
+            var book = new InMemoryBook("Test Book");
             book.AddGrade(30.1);
             book.AddGrade(40.2);
             book.AddGrade(50.5);
@@ -29,7 +29,7 @@ namespace GradeBook.Tests
         public void CannotAddNegative()
         {
             // arrange
-            var book = new Book("Test Book");
+            var book = new InMemoryBook("Test Book");
 
             // act / assert
             Assert.Throws<ArgumentException>(() => book.AddGrade(-1));
@@ -40,7 +40,7 @@ namespace GradeBook.Tests
         public void CanAddLetterGrade()
         {
             // arrange
-            var book = new Book("Letters");
+            var book = new InMemoryBook("Letters");
 
             // act
             book.AddGrade('B');
@@ -54,7 +54,7 @@ namespace GradeBook.Tests
         public void CanSetAndGetName()
         {
             // arrange
-            var book = new Book("Hello");
+            var book = new InMemoryBook("Hello");
             
             // act
             book.Name = "Test";
@@ -70,18 +70,18 @@ namespace GradeBook.Tests
             Assert.Throws<InvalidOperationException>(() =>
             {
                 const string emptyName = "";
-                new Book(emptyName);
+                new InMemoryBook(emptyName);
             });
             
             Assert.Throws<InvalidOperationException>(() =>
             {
-                var b = new Book("null test");
+                var b = new InMemoryBook("null test");
                 b.Name = null;
             });
 
             Assert.Throws<InvalidOperationException>(() =>
             {
-                var b = new Book("whitespace test");
+                var b = new InMemoryBook("whitespace test");
                 b.Name = "      ";
             });
         }
