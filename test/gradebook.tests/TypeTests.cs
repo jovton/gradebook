@@ -197,15 +197,16 @@ namespace GradeBook.Tests
         [Fact]
         public void MultiCastDelegateTest()
         {
-            logCounter = 0;
             // arrange
             WriteLogDelegate log = FirstLog;
             log += SecondLog;
+            logCounter = 0;
+
             // act
             var message = log("hello");
 
             // assert
-            Assert.Equal(logCounter, 2);
+            Assert.Equal(2, logCounter);
         }
 
         private string SecondLog(string message)
