@@ -54,9 +54,11 @@ namespace GradeBook
                 }
             }
 
-            var stats = book.ComputeStatistics();
-
-            ShowGradeStats(stats);
+            if (book.HasGrades)
+            {
+                var stats = book.ComputeStatistics();
+                ShowGradeStats(stats);
+            }
         }
 
         private static void AddGrade(Book book, string input)
