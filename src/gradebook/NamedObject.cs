@@ -2,7 +2,7 @@ using System;
 
 namespace GradeBook
 {
-    public class NamedObject
+    public class NamedObject : INamedObject
     {
         private string name;
         

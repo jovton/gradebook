@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace GradeBook
 {
-    public delegate void GradeAddedDelegate(object source, EventArgs args);
-
     public class InMemoryBook : Book
     {
         private List<double> grades;
@@ -21,22 +19,20 @@ namespace GradeBook
 
         public override void AddGrade(double grade)
         {
-            if (grade >= 0 && grade <= 100)
+            EnsureValidGrade(grade);
+            grades.Add(grade);
+
+            if (GradeAdded != null)
             {
-                grades.Add(grade);
-                if (GradeAdded != null)
-                {
-                    GradeAdded(this, new EventArgs() {  });
-                }
+                GradeAdded(this, new EventArgs() {  });
             }
-            else
-            {
-                throw new ArgumentException("ERROR: Invalid grade. Grades can only be between 0 and 100.", nameof(grade));
-            }
+
         }
 
         public override void AddGrade(char letter)
         {
+            EnsureValidGrade(letter);
+
             switch (letter.ToString().ToUpper()[0])
             {
                 case 'A':
@@ -58,9 +54,6 @@ namespace GradeBook
                 case 'F':
                     AddGrade(50);
                     break;
-
-                default:
-                    throw new ArgumentException($"Error: Invalid letter grade '{letter}'. Grades can only be from A to D, or F.");
             }
         }
 
@@ -79,15 +72,14 @@ namespace GradeBook
         {
             double average = 0;
 
-            if (grades.Any())
+            if (HasGrades)
             {
                 var index = 0;
                 
                 do
                 {
-                        average += grades[index];
-                        index++;
-
+                    average += grades[index];
+                    index++;
                 } while (index < grades.Count);
             
                 average /= grades.Count;

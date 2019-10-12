@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using Xunit;
 using GradeBook;
 
 namespace GradeBook.Tests
 {
-    public class BookTests
+    public class InMemoryBookTests
     {
         [Fact]
         public void ComputeStatistics()
