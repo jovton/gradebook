@@ -1,47 +1,54 @@
+using System;
 using System.Collections.Generic;
 
 namespace GradeBook
 {
     public class Statistics
     {
-        private double average;
+        public double Low { get; private set; }
+        public double High { get; private set; }
+
         public double Average
         {
             get
             {
-                return average;
-            }
-            internal set
-            {
-                average = value;
-
-                switch (average)
-                {
-                    case var d when d >= 90:
-                        Letter = 'A';
-                        break;
-
-                    case var d when d >= 80:
-                        Letter = 'B';
-                        break;
-
-                    case var d when d >= 70:
-                        Letter = 'C';
-                        break;
-
-                    case var d when d >= 60:
-                        Letter = 'D';
-                        break;
-
-                    default:
-                        Letter = 'F';
-                        break;
-                }
-
+                return sum / (count == 0 ? 1 : count);
             }
         }
-        public double Low { get; internal set; }
-        public double High { get; internal set; }
-        public char Letter { get; private set; }
+
+        public char Letter
+        {
+            get
+            {
+                switch (Average)
+                {
+                    case var d when d >= 90:
+                        return 'A';
+
+                    case var d when d >= 80:
+                        return 'B';
+
+                    case var d when d >= 70:
+                        return 'C';
+
+                    case var d when d >= 60:
+                        return 'D';
+
+                    default:
+                        return 'F';
+                }
+            }
+        }
+
+        public void Add(double grade)
+        {
+            sum += grade;
+            count++;
+            High = count == 1 ? grade : Math.Max(grade, High);
+            Low = count == 1 ? grade : Math.Min(grade, Low);
+        }
+
+        private double sum;
+        private int count;
     }
 }

@@ -16,46 +16,55 @@ namespace GradeBook
 
         public FileSystemBook(string name) : base(name)
         {
-            fileName = $"{name}_grades.txt";
+            fileName = $"{name}.txt";
             File.AppendAllText(fileName, "");
-            RefreshGradesFromFile();
+            grades = ReadGradesFromFile();
         }
 
-        private void RefreshGradesFromFile()
+        private List<double> ReadGradesFromFile()
         {
+            var tempGrades = new List<double>();
             var fileContent = File.ReadAllText(fileName);
             var fileGradesArray = fileContent.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            
-            var gradesBackupArray = new double[grades.Count];
-            grades.CopyTo(0, gradesBackupArray, 0, grades.Count);
-            grades.Clear();
 
             foreach (var fileGrade in fileGradesArray)
             {
-                try
+                var fileErrorMessage = $"ERROR: The grade book file contains an invalid grade '{fileGrade}'.";
+
+                if (double.TryParse(fileGrade, out double grade))
                 {
-                    if (double.TryParse(fileGrade, out double grade))
+                    try
                     {
                         EnsureValidGrade(grade);
-                        grades.Add(grade);
                     }
-                    else if (fileGrade.Length == 1)
+                    catch (ArgumentException)
+                    {
+                        throw new FileLoadException(fileErrorMessage);
+                    }
+
+                    tempGrades.Add(grade);
+                }
+                else if (fileGrade.Length == 1)
+                {
+                    try
                     {
                         EnsureValidGrade(fileGrade[0]);
-                        var validLetterGrade = fileGrade.ToString().ToUpper()[0];
-                        grades.Add(ValidLetterGrades[validLetterGrade]);
                     }
-                    else
+                    catch (ArgumentException)
                     {
-                        throw new FileLoadException($"ERROR: The grade book file contains an invalid grade '{fileGrade}'.");
+                        throw new FileLoadException(fileErrorMessage);
                     }
+                    
+                    var validLetterGrade = fileGrade.ToString().ToUpper()[0];
+                    tempGrades.Add(ValidLetterGrades[validLetterGrade]);
                 }
-                catch
+                else
                 {
-                    grades.AddRange(gradesBackupArray);
-                    throw;
+                    throw new FileLoadException(fileErrorMessage);
                 }
             }
+
+            return tempGrades;
         }
 
         public override event GradeAddedDelegate GradeAdded;
@@ -66,6 +75,11 @@ namespace GradeBook
             string gradeString = GetGradeString(grade);
             File.AppendAllText(fileName, $"{gradeString}");
             grades.Add(grade);
+
+            if (GradeAdded != null)
+            {
+                GradeAdded(this, new EventArgs() { });
+            }
         }
 
         private string GetGradeString(double grade)

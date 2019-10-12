@@ -7,14 +7,14 @@ namespace GradeBook
     public class InMemoryBook : Book
     {
         private List<double> grades;
-        
+
         public override bool HasGrades => grades.Any();
 
         public InMemoryBook(string name) : base(name)
         {
             grades = new List<double>();
         }
-        
+
         public override event GradeAddedDelegate GradeAdded;
 
         public override void AddGrade(double grade)
@@ -24,7 +24,7 @@ namespace GradeBook
 
             if (GradeAdded != null)
             {
-                GradeAdded(this, new EventArgs() {  });
+                GradeAdded(this, new EventArgs() { });
             }
         }
 

@@ -14,7 +14,7 @@ namespace GradeBook
             Console.WriteLine("");
             Console.WriteLine($"{book.Name} version 0.0.1:");
             Console.WriteLine("");
-            
+
             EnterGrades(args, book);
 
             if (book.HasGrades)

@@ -7,8 +7,8 @@ namespace GradeBook.Tests
 {
     public class FileSystemBookTests
     {
-        const string bookName = "test";
-        static readonly string fileName = $"{bookName}_grades.txt";
+        const string bookName = "FileSystemBookTests";
+        static readonly string fileName = $"{bookName}.txt";
         
         [Fact]
         public void NewFileSystemBookCreatesFile()
@@ -17,7 +17,7 @@ namespace GradeBook.Tests
             File.Delete(fileName);
 
             // act
-            var book = new FileSystemBook("test");
+            var book = new FileSystemBook(bookName);
 
             // assert
             Assert.True(File.Exists(fileName));
@@ -123,6 +123,52 @@ namespace GradeBook.Tests
             Assert.Equal(42.1, stats.Low);
             Assert.Equal(70.4, stats.High);
             Assert.Equal('F', stats.Letter);
+        }
+
+                private int gradeAddedEventCounter;
+
+        [Fact]
+        public void AddGradeRaisesGradeAddedEvent()
+        {
+            // arrange
+            var book = new FileSystemBook("test");
+            book.GradeAdded += GradeAdded;
+            gradeAddedEventCounter = 0;
+
+            // act
+            book.AddGrade(1);
+
+            // assert
+            Assert.Equal(1, gradeAddedEventCounter);
+        }
+
+        private void GradeAdded(object source, EventArgs args)
+        {
+            gradeAddedEventCounter++;
+        }
+
+        [Fact]
+        public void ExistingBookFileTest()
+        {
+            // arrange
+            File.Delete(fileName);
+            File.WriteAllText(fileName, "44 55 66 B A 77");
+            // act
+            var book = new FileSystemBook(bookName);
+
+            // assert
+            Assert.True(book.HasGrades);
+        }
+
+        [Fact]
+        public void ExistingBookInvalidFileTest()
+        {
+            // arrange
+            File.Delete(fileName);
+            File.WriteAllText(fileName, "44 H // @$% 55 66 B A 77");
+            
+            // act / assert
+            Assert.Throws<FileLoadException>(() => new FileSystemBook(bookName));
         }
     }
 }
