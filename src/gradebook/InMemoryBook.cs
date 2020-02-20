@@ -6,13 +6,13 @@ namespace GradeBook
 {
     public class InMemoryBook : Book
     {
-        private List<double> grades;
+        private List<double> _grades;
 
-        public override bool HasGrades => grades.Any();
+        public override bool HasGrades => _grades.Any();
 
         public InMemoryBook(string name) : base(name)
         {
-            grades = new List<double>();
+            _grades = new List<double>();
         }
 
         public override event GradeAddedDelegate GradeAdded;
@@ -20,17 +20,18 @@ namespace GradeBook
         public override void AddGrade(double grade)
         {
             EnsureValidGrade(grade);
-            grades.Add(grade);
+            _grades.Add(grade);
 
             if (GradeAdded != null)
             {
-                GradeAdded(this, new EventArgs() { });
+                // ReSharper disable once PolymorphicFieldLikeEventInvocation
+                GradeAdded(this, new EventArgs());
             }
         }
 
         public override Statistics ComputeStatistics()
         {
-            return ComputeStatistics(grades);
+            return ComputeStatistics(_grades);
         }
     }
 }

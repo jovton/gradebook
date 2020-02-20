@@ -1,6 +1,5 @@
 ﻿using System;
 using Xunit;
-using GradeBook;
 
 namespace GradeBook.Tests
 {
@@ -26,7 +25,7 @@ namespace GradeBook.Tests
         }
 
         [Fact]
-        public void CannotAddOutside0to100()
+        public void CannotAddOutside0To100()
         {
             // arrange
             var book = new InMemoryBook("Test Book");
@@ -82,6 +81,7 @@ namespace GradeBook.Tests
             Assert.Throws<InvalidOperationException>(() =>
             {
                 const string emptyName = "";
+                // ReSharper disable once ObjectCreationAsStatement
                 new InMemoryBook(emptyName);
             });
             
@@ -98,7 +98,7 @@ namespace GradeBook.Tests
             });
         }
 
-        private int gradeAddedEventCounter;
+        private int _gradeAddedEventCounter;
 
         [Fact]
         public void AddGradeRaisesGradeAddedEvent()
@@ -106,18 +106,18 @@ namespace GradeBook.Tests
             // arrange
             var book = new InMemoryBook("test");
             book.GradeAdded += GradeAdded;
-            gradeAddedEventCounter = 0;
+            _gradeAddedEventCounter = 0;
 
             // act
             book.AddGrade(1);
 
             // assert
-            Assert.Equal(1, gradeAddedEventCounter);
+            Assert.Equal(1, _gradeAddedEventCounter);
         }
 
         private void GradeAdded(object source, EventArgs args)
         {
-            gradeAddedEventCounter++;
+            _gradeAddedEventCounter++;
         }
 
         [Fact]

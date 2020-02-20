@@ -1,34 +1,34 @@
 using System;
 using Xunit;
-using GradeBook;
 using System.IO;
 
 namespace GradeBook.Tests
 {
     public class FileSystemBookTests
     {
-        const string bookName = "FileSystemBookTests";
-        static readonly string fileName = $"{bookName}.txt";
+        const string BookName = "FileSystemBookTests";
+        static readonly string FileName = $"{BookName}.txt";
         
         [Fact]
         public void NewFileSystemBookCreatesFile()
         {
             // arrange
-            File.Delete(fileName);
+            File.Delete(FileName);
 
             // act
-            var book = new FileSystemBook(bookName);
+            // ReSharper disable once ObjectCreationAsStatement
+            new FileSystemBook(BookName);
 
             // assert
-            Assert.True(File.Exists(fileName));
+            Assert.True(File.Exists(FileName));
         }
 
         [Fact]
-        public void CannotAddOutside0to100()
+        public void CannotAddOutside0To100()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
 
             // act / assert
             Assert.Throws<ArgumentException>(() => book.AddGrade(-1));
@@ -40,8 +40,8 @@ namespace GradeBook.Tests
         public void CannotAddInvalidLetterGrade()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
 
             // act / assert
             Assert.Throws<ArgumentException>(() => book.AddGrade('L'));
@@ -52,14 +52,14 @@ namespace GradeBook.Tests
         public void AddingOneGradeAddsToFile()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
 
             // act
             book.AddGrade(10);
 
             // assert
-            var fileContent = File.ReadAllText(fileName);
+            var fileContent = File.ReadAllText(FileName);
             var grade = double.Parse(fileContent);
             Assert.Equal(10, grade);
         }
@@ -68,15 +68,15 @@ namespace GradeBook.Tests
         public void AddingManyGradesAddsToFile()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
 
             // act
             book.AddGrade(20);
             book.AddGrade(30);
 
             // assert
-            var fileContent = File.ReadAllText(fileName);            
+            var fileContent = File.ReadAllText(FileName);            
             Assert.Equal("20 30", fileContent);
         }
 
@@ -84,8 +84,8 @@ namespace GradeBook.Tests
         public void NewEmptyBookHasNoGrades()
         {
             // arrange / act
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
             
             // assert
             Assert.False(book.HasGrades);
@@ -95,8 +95,8 @@ namespace GradeBook.Tests
         public void AddingValidGradeMakesHasGradesTrue()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
             
             // act
             book.AddGrade(12);
@@ -109,8 +109,8 @@ namespace GradeBook.Tests
         public void CanComputeStatistics()
         {
             // arrange
-            File.Delete(fileName);
-            var book = new FileSystemBook(bookName);
+            File.Delete(FileName);
+            var book = new FileSystemBook(BookName);
             book.AddGrade(56.2);
             book.AddGrade(70.4);
             book.AddGrade(42.1);
@@ -125,36 +125,36 @@ namespace GradeBook.Tests
             Assert.Equal('F', stats.Letter);
         }
 
-                private int gradeAddedEventCounter;
+                private int _gradeAddedEventCounter;
 
         [Fact]
         public void AddGradeRaisesGradeAddedEvent()
         {
             // arrange
-            var book = new FileSystemBook(bookName);
+            var book = new FileSystemBook(BookName);
             book.GradeAdded += GradeAdded;
-            gradeAddedEventCounter = 0;
+            _gradeAddedEventCounter = 0;
 
             // act
             book.AddGrade(1);
 
             // assert
-            Assert.Equal(1, gradeAddedEventCounter);
+            Assert.Equal(1, _gradeAddedEventCounter);
         }
 
         private void GradeAdded(object source, EventArgs args)
         {
-            gradeAddedEventCounter++;
+            _gradeAddedEventCounter++;
         }
 
         [Fact]
         public void ExistingBookFileTest()
         {
             // arrange
-            File.Delete(fileName);
-            File.WriteAllText(fileName, "44 55 66 B A 77");
+            File.Delete(FileName);
+            File.WriteAllText(FileName, "44 55 66 B A 77");
             // act
-            var book = new FileSystemBook(bookName);
+            var book = new FileSystemBook(BookName);
 
             // assert
             Assert.True(book.HasGrades);
@@ -164,11 +164,11 @@ namespace GradeBook.Tests
         public void ExistingBookInvalidFileTest()
         {
             // arrange
-            File.Delete(fileName);
-            File.WriteAllText(fileName, "44 H // @$% 55 66 B A 77");
+            File.Delete(FileName);
+            File.WriteAllText(FileName, "44 H // @$% 55 66 B A 77");
             
             // act / assert
-            Assert.Throws<FileLoadException>(() => new FileSystemBook(bookName));
+            Assert.Throws<FileLoadException>(() => new FileSystemBook(BookName));
         }
     }
 }

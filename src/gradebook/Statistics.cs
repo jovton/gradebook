@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace GradeBook
 {
@@ -12,7 +11,7 @@ namespace GradeBook
         {
             get
             {
-                return sum / (count == 0 ? 1 : count);
+                return _sum / (_count == 0 ? 1 : _count);
             }
         }
 
@@ -42,13 +41,13 @@ namespace GradeBook
 
         public void Add(double grade)
         {
-            sum += grade;
-            count++;
-            High = count == 1 ? grade : Math.Max(grade, High);
-            Low = count == 1 ? grade : Math.Min(grade, Low);
+            _sum += grade;
+            _count++;
+            High = _count == 1 ? grade : Math.Max(grade, High);
+            Low = _count == 1 ? grade : Math.Min(grade, Low);
         }
 
-        private double sum;
-        private int count;
+        private double _sum;
+        private int _count;
     }
 }

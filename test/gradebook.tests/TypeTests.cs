@@ -1,6 +1,4 @@
-using System;
 using Xunit;
-using GradeBook;
 
 namespace GradeBook.Tests
 {
@@ -39,6 +37,8 @@ namespace GradeBook.Tests
             Assert.Equal("Book 1", book.Name);
         }
 
+        // ReSharper disable once RedundantAssignment
+        // ReSharper disable once UnusedParameter.Local
         private void GetBookSetName(InMemoryBook book, string name)
         {
             book = new InMemoryBook(name);
@@ -86,7 +86,7 @@ namespace GradeBook.Tests
             // assert
             Assert.NotEqual("Test Book", book2.Name);
             Assert.NotSame(book1, book2);
-            Assert.False(object.ReferenceEquals(book1, book2));
+            Assert.False(ReferenceEquals(book1, book2));
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace GradeBook.Tests
 
             // assert
             Assert.Same(book1, book2);
-            Assert.True(object.ReferenceEquals(book1, book2));
+            Assert.True(ReferenceEquals(book1, book2));
         }
 
         private InMemoryBook GetBook(string name)
@@ -121,6 +121,8 @@ namespace GradeBook.Tests
             Assert.Equal(3, x);
         }
 
+        // ReSharper disable once RedundantAssignment
+        // ReSharper disable once UnusedParameter.Local
         private void SetInt(int x)
         {
             x = 43;
@@ -192,7 +194,7 @@ namespace GradeBook.Tests
             return message;
         }
 
-        private int logCounter;
+        private int _logCounter;
         
         [Fact]
         public void MultiCastDelegateTest()
@@ -200,24 +202,24 @@ namespace GradeBook.Tests
             // arrange
             WriteLogDelegate log = FirstLog;
             log += SecondLog;
-            logCounter = 0;
+            _logCounter = 0;
 
             // act
-            var message = log("hello");
+            log("hello");
 
             // assert
-            Assert.Equal(2, logCounter);
+            Assert.Equal(2, _logCounter);
         }
 
         private string SecondLog(string message)
         {
-            logCounter++;
+            _logCounter++;
             return message;
         }
 
         private string FirstLog(string message)
         {
-            logCounter++;
+            _logCounter++;
             return message;
         }
     }

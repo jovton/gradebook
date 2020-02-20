@@ -2,29 +2,28 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GradeBook
 {
     public class FileSystemBook : Book
     {
-        private readonly string fileName;
+        private readonly string _fileName;
 
-        private readonly List<double> grades = new List<double>();
+        private readonly List<double> _grades;
 
-        public override bool HasGrades => grades.Any();
+        public override bool HasGrades => _grades.Any();
 
         public FileSystemBook(string name) : base(name)
         {
-            fileName = $"{name}.txt";
-            File.AppendAllText(fileName, "");
-            grades = ReadGradesFromFile();
+            _fileName = $"{name}.txt";
+            File.AppendAllText(_fileName, "");
+            _grades = ReadGradesFromFile();
         }
 
         private List<double> ReadGradesFromFile()
         {
             var tempGrades = new List<double>();
-            var fileContent = File.ReadAllText(fileName);
+            var fileContent = File.ReadAllText(_fileName);
             var fileGradesArray = fileContent.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var fileGrade in fileGradesArray)
@@ -55,7 +54,7 @@ namespace GradeBook
                         throw new FileLoadException(fileErrorMessage);
                     }
                     
-                    var validLetterGrade = fileGrade.ToString().ToUpper()[0];
+                    var validLetterGrade = fileGrade.ToUpper()[0];
                     tempGrades.Add(ValidLetterGrades[validLetterGrade]);
                 }
                 else
@@ -73,19 +72,20 @@ namespace GradeBook
         {
             EnsureValidGrade(grade);
             string gradeString = GetGradeString(grade);
-            File.AppendAllText(fileName, $"{gradeString}");
-            grades.Add(grade);
+            File.AppendAllText(_fileName, $"{gradeString}");
+            _grades.Add(grade);
 
             if (GradeAdded != null)
             {
-                GradeAdded(this, new EventArgs() { });
+                // ReSharper disable once PolymorphicFieldLikeEventInvocation
+                GradeAdded(this, new EventArgs());
             }
         }
 
         private string GetGradeString(double grade)
         {
             string gradeString = $"{grade}";
-            var fileSize = new FileInfo(fileName).Length;
+            var fileSize = new FileInfo(_fileName).Length;
 
             if (fileSize > 0)
             {
@@ -97,7 +97,7 @@ namespace GradeBook
 
         public override Statistics ComputeStatistics()
         {
-            return ComputeStatistics(grades);
+            return ComputeStatistics(_grades);
         }
     }
 }

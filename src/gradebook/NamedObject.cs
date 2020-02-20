@@ -4,7 +4,7 @@ namespace GradeBook
 {
     public class NamedObject : INamedObject
     {
-        private string name;
+        private string _name;
         
         public NamedObject(string name)
         {
@@ -15,13 +15,13 @@ namespace GradeBook
         {
             get
             {
-                return name;
+                return _name;
             }
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    name = value;
+                    _name = value;
                 }
                 else
                 {
